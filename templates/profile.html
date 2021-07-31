@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+
+
+
+<h3>Kullanıcı Profili</h3>
+<hr>
+<a href="{% url 'user:edit_profile' %}" class = "btn btn-danger">Bilgileri Güncelle</a>
+<a href="{% url 'user:edit_profile_page' %}" class = "btn btn-danger">Profili Güncelle</a>
+<hr>
+
+
+<div class="card mb-3">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+    {% if user.profile.profile_pic %}
+        <img src="{{user.profile.profile_pic.url}}" class="card-img">
+    {% else %}
+        <img src="{% static 'blog/images/default_profile_pic.jpg' %}" class="card-img">
+    {% endif %}
+      
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">Kullanıcı Bilgileri</h5>
+        <p class="card-text">Kullanıcı Adı: {{user.username}}</p>
+        <p class="card-text">Bio: {{user.profile.bio}}</p>
+        <p class="card-text">İsim: {{user.first_name}} </p>
+        <p class="card-text">Soyisim: {{user.last_name}} </p>
+        <p class="card-text">Email: {{user.email}} </p>
+        <p class="card-text">Katılma Tarihi: {{user.date_joined}} </p>
+        <p class="card-text"><small class="text-muted">En son {{user.last_login}} tarihinde giriş yaptı.</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+<br>
+
+</p>
+
+
+{% endblock body %}

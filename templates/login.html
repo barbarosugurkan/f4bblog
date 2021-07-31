@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <h3>Giriş Yap</h3>
+    <hr>
+    <form method = "post">
+
+    {% csrf_token %}
+    {{form|crispy}}
+    <button type = "submit" class = "btn btn-danger">Giriş Yap</button>
+    <br><br>
+
+    <a href="#" class="btn btn-primary mb-2">Login with Instagram</a>
+    <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-primary mb-2">Login with Facebook</a>
+    <a href="#" class="btn btn-primary mb-2">Login with LinkedIn</a>
+    
+
+    </form>
+  </div>
+</div>
+
+
+
+{% endblock body %}

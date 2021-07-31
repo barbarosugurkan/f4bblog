@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+
+
+<div class="row">
+
+    <!-- Post Content Column -->
+    <div class="col-lg-8">
+
+      <!-- Title -->
+      <h2 class="mt-4">{{article.title}}</h2>
+
+      <!-- Author -->
+      <p class="lead">
+      {{article.author}}
+      tarafından eklendi.
+        
+      </p>
+
+      <hr>
+
+      <!-- Date/Time -->
+      <p>
+      {{article.created_date}}
+      tarihinde eklendi.
+      </p>
+
+      <hr>
+
+      <!-- Preview Image {{ object.image_url|default_if_none:'#' }}-->
+      {% if article.article_image %}
+      <img class="img-fluid rounded" src="{{article.article_image.url}}" alt="">
+      {% endif %}
+      
+
+
+      <hr> 
+
+      <!-- Post Content -->
+      <p class = "lead">
+        {{article.content|safe}}
+      </p>
+      <hr>
+
+
+      <!--Beğeni Bölümü-->
+      <form action="{% url 'article:like_article' article.id %}" method="POST">
+        {% csrf_token %}
+        {% if liked %}
+        <button type="submit" name="post_id" value ="{{post.id}}" class = "btn btn-danger">Beğenme</button>
+        {% else %}
+        <button type="submit" name="post_id" value ="{{post.id}}" class = "btn btn-success">Beğen</button>
+        {% endif %}
+        - {{total_likes}} Beğeni
+      </form>
+    
+      <!--Yorum Bölümü-->
+      
+
+      <!--Yorum Bölümü-->
+      <div class="card my-4">
+        <div class="text-center">
+          <h4 class="card-header">Yorum Ekle:</h4>
+        </div>
+        <div class="card-body">
+        
+          <form method = "post" action = "{% url 'article:comment' article.id %}">
+          {% csrf_token %}
+            <div class="form-group">
+              <textarea name="comment_content" class="form-control" rows="3" placeholder="Yorumunuzu girin..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Ekle</button>
+          </form>
+        </div>
+
+      <br>
+      {% if comments %}
+        <div class="text-center"><h4>Yorumlar</h4></div> 
+      {% for comment in comments %}
+      <div class="media mb-4">
+        <div class="mr-3 ml-4 mt-3">
+          {% if comment.comment_author.profile.profile_pic %}
+            <img width=50 heigth=50 class="rounded-circle" src="{{comment.comment_author.profile.profile_pic.url}}" >
+          {% else %}
+            <img width=50 heigth=50 class="rounded-circle" src="{% static 'blog/images/default_profile_pic.jpg' %}" >
+          {% endif %}
+          
+        </div>
+        <div class="media-body">
+          <h5 class="mt-0">{{comment.comment_author}}</h5>
+          {{comment.commnet_date}}
+          <br>
+          {{comment.comment_content}}
+        </div>
+      </div>
+     
+      
+      {% endfor %}
+      {% else %}
+      <div class = "alert alert-danger" >
+      Bu makaleye herhangi bir yorum yazılmamıştır. İlk yorumu yapan siz olun!
+      </div>
+      {% endif %}
+
+      </div>
+
+      <br/>
+
+      <!--Hakkında Bölümü-->
+      <div class="card">
+        <div class="text-center">
+          <h4 class="card-header">Yazar Hakkında</h4>
+        </div>
+        <div class="card-body">
+          <div class="media mb-4">
+          {% if article.author.profile.profile_pic %}
+              <img width=100 heigth=100 class="z-depth-5 d-flex mr-3 ml-4 rounded-circle" src="{{article.author.profile.profile_pic.url}}" >
+          {% else %}
+              <img width=100 heigth=100 class="z-depth-5 d-flex mr-3 ml-4 rounded-circle" src="{% static 'blog/images/default_profile_pic.jpg' %}" >
+          {% endif %}
+              
+              <div class="media-body">
+                <h5 class="card-title">
+                  {{article.author.first_name}} 
+                  {{article.author.last_name}}
+                </h5>
+                <p class="small text-muted">
+                  <a href="{% url 'user:profile' article.author %}">Profile Page</a>
+                  {% if article.author.profile.website_url %}
+                  | <a href="https://{{article.author.profile.website_url}}">Website</a>
+                  {% endif %}
+                  
+                  {% if article.author.profile.facebook_url %}
+                  | <a href="https://{{article.author.profile.facebook_url}}">Facebook</a> 
+                  {% endif %}
+
+                  {% if article.author.profile.twitter_url %}
+                  | <a href="https://{{article.author.profile.twitter_url}}">Twitter</a> 
+                  {% endif %}
+
+                  {% if article.author.profile.instagram_url %}
+                  | <a href="https://{{article.author.profile.instagram_url}}">Instagram</a>
+                  {% endif %}
+
+                  {% if article.author.profile.pinterest_url %}
+                  | <a href="https://{{article.author.profile.pinterest_url}}">Pinterest</a> 
+                  {% endif %}
+
+                </p>
+                <p class="card-text">{{article.author.profile.bio}}</p>
+              </div>
+          </div>
+        </div>
+      </div>
+      
+
+
+    
+    </div>
+
+  </div>
+
+
+{% endblock body %}
